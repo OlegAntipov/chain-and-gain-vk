@@ -79296,8 +79296,17 @@ var PlatformVK = class extends PlatformBase {
     if (!window.vkBridge)
       throw new Error("[VK SDK] \u043D\u0435 \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D, \u043F\u0440\u043E\u0438\u0437\u043E\u0448\u043B\u0430 \u043E\u0448\u0438\u0431\u043A\u0430!");
     this.sdk = window.vkBridge;
-    if (true)
-      this.sdk.subscribe((e2) => AnLog.debug(struct(e2)));
+    this.sdk.subscribe((e2) => {
+      if (e2.detail.type === "VKWebAppViewHide") {
+        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0442\u0435\u0440\u044F\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
+        AnApp.self.paused = true;
+        AnEvents.emit("app:lostFocus");
+      } else if (e2.detail.type === "VKWebAppViewRestore") {
+        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
+        AnApp.self.paused = false;
+        AnEvents.emit("app:getFocus");
+      }
+    });
     if (true) AnLog.debug(`[VK SDK] \u0438\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0438\u0440\u0443\u0435\u043C \u043F\u043B\u0430\u0442\u0444\u043E\u0440\u043C\u0443....`);
     await this.sdk.send("VKWebAppInit");
     if (true) AnLog.debug(`[VK SDK] \u043F\u0440\u043E\u0438\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u043D\u043D\u043E!`);
@@ -79305,20 +79314,6 @@ var PlatformVK = class extends PlatformBase {
     this.sdk.send("VKWebAppCheckNativeAds", { ad_format: import_vk_bridge.EAdsFormats.INTERSTITIAL });
     this._initialized = true;
     AnLog.info("[VK SDK] \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D \u0438 \u043F\u0440\u043E\u0438\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u043D");
-    this.sdk.subscribe((e2) => {
-      if (e2.detail.type === "VKWebAppViewHide") {
-        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0442\u0435\u0440\u044F\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
-        AnApp.self.paused = true;
-        AnEvents.emit("app:lostFocus");
-      }
-    });
-    this.sdk.subscribe((e2) => {
-      if (e2.detail.type === "VKWebAppViewRestore") {
-        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
-        AnApp.self.paused = false;
-        AnEvents.emit("app:getFocus");
-      }
-    });
   }
   // модификация параметров игры исходя из платформы
   modifyGameParams(G2) {
