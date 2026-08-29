@@ -79305,6 +79305,20 @@ var PlatformVK = class extends PlatformBase {
     this.sdk.send("VKWebAppCheckNativeAds", { ad_format: import_vk_bridge.EAdsFormats.INTERSTITIAL });
     this._initialized = true;
     AnLog.info("[VK SDK] \u0443\u0441\u043F\u0435\u0448\u043D\u043E \u0437\u0430\u0433\u0440\u0443\u0436\u0435\u043D \u0438 \u043F\u0440\u043E\u0438\u043D\u0438\u0446\u0438\u0430\u043B\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u043D");
+    this.sdk.subscribe((e2) => {
+      if (e2.detail.type === "VKWebAppViewHide") {
+        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u0442\u0435\u0440\u044F\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
+        AnApp.self.paused = true;
+        AnEvents.emit("app:lostFocus");
+      }
+    });
+    this.sdk.subscribe((e2) => {
+      if (e2.detail.type === "VKWebAppViewRestore") {
+        if (true) AnLog.debug("\u041F\u0440\u0438\u043B\u043E\u0436\u0435\u043D\u0438\u0435 \u043F\u043E\u043B\u0443\u0447\u0438\u043B\u043E \u0444\u043E\u043A\u0443\u0441");
+        AnApp.self.paused = false;
+        AnEvents.emit("app:getFocus");
+      }
+    });
   }
   // модификация параметров игры исходя из платформы
   modifyGameParams(G2) {
