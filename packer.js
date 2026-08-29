@@ -68810,7 +68810,7 @@ _G.dev_disableMenuInfo = true;
 // форсировать первый запуск
 _G.dev_forceFirstRun = false;
 // форсировать запуск без музыки
-_G.dev_forceNoMusic = true;
+_G.dev_forceNoMusic = false;
 // большое число ходов для разработчика
 _G.dev_totalMovesInfinity = false;
 // показывать все доступные цепочки на поле
